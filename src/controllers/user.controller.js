@@ -45,7 +45,7 @@ const update = async (req, res, next) => {
   const { userId }= req.params;
   try {
     const result = await userService.update({userId, ...req.body});
-    res.status(201).json({
+    res.status(200).json({
       message: 'User updated successfully',
       ...result
     });
@@ -58,7 +58,7 @@ const updatePassword = async (req, res, next) => {
   const { userId } = req.params;
   try {
     const result = await userService.updatePassword({userId, ...req.body });
-    res.status(201).json({
+    res.status(200).json({
       message: 'Password updated successfully',
       ...result
     });
@@ -70,7 +70,7 @@ const updatePassword = async (req, res, next) => {
 const deleted = async (req, res, next) => {
   try {
     const result = await userService.delete(req.params);
-    res.status(200).json({
+    res.status(204).json({
       message: 'User deleted successfully',
       ...result
     })

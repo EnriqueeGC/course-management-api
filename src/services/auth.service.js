@@ -2,18 +2,18 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/index.models");
 const authConfig = require("../config/auth.config");
-const { ConflictError } = require("../utils/errors");
+const { UnauthorizedError } = require("../utils/errors");
 
 class AuthService {
   async login({email, password}) {
     const user = await User.scope('withPassword').findOne({ where: {email} });
     if(!user){
-      throw new ConflictError('Email or password incorrect');
+      throw new UnauthorizedError('Email or password incorrect');
     };
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if(!isValidPassword){
-      throw new ConflictError('Email or password incorrect');
+      throw new UnauthorizedError('Email or password incorrect');
     };
 
     // const token = jwt.sign(

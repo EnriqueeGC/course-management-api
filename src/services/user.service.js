@@ -2,13 +2,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/index.models");
 const authConfig = require("../config/auth.config");
-const { ConflictError } = require("../utils/errors");
+const { ConflictError, NotFoundError, UnauthorizedError } = require("../utils/errors");
 
 class UserService {
   async _ensureUserExist(userId){
     const user = await User.findByPk(userId);
     if(!user){
-      throw new ConflictError('User does not exist');
+      throw new NotFoundError('User does not exist');
     };
 
     return {
@@ -50,7 +50,7 @@ class UserService {
   async getAll() {
     const result = await User.findAll();
     if (!result) {
-      throw new ConflictError("Not users found");
+      throw new NotFoundError("Not users found");
     }
 
     return {
@@ -89,12 +89,12 @@ class UserService {
   async updatePassword({userId, oldPassword, newPassword}){
     const user = await User.scope('withPassword').findByPk(userId);
     if(!user){
-      throw new ConflictError('User not found');
+      throw new NotFoundError('User not found');
     };
 
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if(!isMatch){
-      throw new ConflictError('Wrong password');
+      throw new UnauthorizedError('Wrong password');
     };
 
     user.password = await bcrypt.hash(newPassword, authConfig.saltRounds);

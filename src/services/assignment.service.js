@@ -1,5 +1,5 @@
 const { Assignments, User, Courses } = require('../models/index.models');
-const {ConflictError} = require('../utils/errors');
+const {ConflictError, NotFoundError} = require('../utils/errors');
 const UserService = require('./user.service');
 const CoursesService = require('./course.service');
 const { where } = require('sequelize');
@@ -11,7 +11,7 @@ class AssignmentService{
   async _ensureAssignmentExist(assignmentId){
     const assignment = await Assignments.findByPk(assignmentId);
     if(!assignment){
-      throw new ConflictError('Assignment does not exist');
+      throw new NotFoundError('Assignment does not exist');
     };
 
     return {

@@ -1,11 +1,11 @@
 const { Courses } = require("../models/index.models");
-const { ConflictError } = require("../utils/errors");
+const { ConflictError, NotFoundError } = require("../utils/errors");
 
 class CoursesService {
   async _ensureCourseExist(courseId){
     const course = await Courses.findByPk(courseId);
     if(!course){
-      throw new ConflictError('Course does not exist');
+      throw new NotFoundError('Course does not exist');
     };
     return {
       course
