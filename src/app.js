@@ -15,7 +15,7 @@ app.use(cors());
 
 app.use(express.json());
 
-sequelize.sync({ force: true })
+sequelize.sync()
     .then(() => console.log('DB Synchronized'))
     .catch(error => console.error('DB sync error: ', error))
 
