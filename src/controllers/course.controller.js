@@ -16,8 +16,10 @@ const create = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await coursesService.getAll();
-    const hasCourses = result.courses && result.courses.length > 0;
+    const { page, limit } = req.query;
+
+    const result = await coursesService.getPaginatedCourses(page, limit);
+    const hasCourses = result.data && result.data.length > 0;
 
     res.status(200).json({
       message: hasCourses 

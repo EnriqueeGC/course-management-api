@@ -16,8 +16,11 @@ const register = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await userService.getAll();
-    const hasUsers = result.users && result.users.length > 0;
+    const { page, limit } = req.query;
+
+    const result = await userService.getPaginatedUser(page, limit);
+
+    const hasUsers = result.data && result.data.length > 0;
     res.status(200).json({
       message: hasUsers
       ? "Users find successfully"

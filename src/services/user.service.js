@@ -47,16 +47,34 @@ class UserService {
       token,
     };
   }
-  async getAll() {
-    const result = await User.findAll();
-    if (!result) {
-      throw new NotFoundError("Not users found");
-    }
+
+  async getPaginatedUser(page=1, limit=10){
+    const validPage = Math.max(1, parseInt(page, 10) || 1);
+    const validLimit = Math.min(100, Math.max(1, parseInt(limit, 10) || 10));
+
+    const offset = (validPage -1 ) * validLimit;
+
+    const { count, rows } = await User.findAndCountAll({
+      limit: validLimit,
+      offset: offset,
+      order: [['createdAt', 'DESC']]
+    });
+
+    const totalPages = Math.ceil(count / validLimit);
 
     return {
-    users: result,
+      data: rows,
+      meta: {
+        totalItems: count,
+        itemCount: rows.length,
+        itemsPerPage: validLimit,
+        totalPages: totalPages,
+        currentPage: validPage,
+        hasNextPage: validPage < totalPages,
+        hasPrevPage: validPage > 1,
+      }
     };
-  }
+  };
 
   async getByPk({ userId }) {
     const user = await this._ensureUserExist(userId);

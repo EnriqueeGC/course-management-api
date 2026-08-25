@@ -16,13 +16,17 @@ const create = async(req, res, next) => {
 
 const getAll = async(req, res, next) => {
   try {
-    const filters = req.query;
-    // Desestructuramos { assignment } directo del objeto que devuelve el servicio
-    const { assignment } = await assignmentService.getAll(filters);
+    const { filters, page, limit } = req.query;
+
+    const assignments = await assignmentService.getPaginatedAssignments({filters}, page, limit);
+
+    const hasAssignments = assignments.data && assignments.data.length > 0;
 
     res.status(200).json({
-      message: "Assignments retrieved successfully",
-      data: assignment // Mandamos el arreglo limpio bajo la propiedad 'data'
+      message: hasAssignments
+      ? "Courses find successfully"
+      : "You dont have any courses yet",
+      ...assignments
     });
   } catch (error) {
     next(error);
