@@ -16,12 +16,6 @@ class AuthService {
       throw new UnauthorizedError('Email or password incorrect');
     };
 
-    // const token = jwt.sign(
-    //   { userId: user.userId, role: user.role },
-    //   authConfig.jwtSecret,
-    //   { expiresIn: authConfig.jwtExpiresIn},
-    // );
-
     const token = jwt.sign(
       { sub: user.userId, role: user.role },
       authConfig.jwtSecret,
@@ -34,7 +28,7 @@ class AuthService {
         email: user.email,
         role: user.role
       },
-      token
+      token,
     };
   };
 };

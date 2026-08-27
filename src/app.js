@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const { sequelize } = require('./models/index.models');
 const userRoutes = require('./routes/user.routes');
 const courseRoutes = require('./routes/course.routers');
@@ -11,9 +12,14 @@ const errorHandler = require('./middlewares/errorHandler');
 
 const app = express()
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'localhost:5173',
+  credentials: true
+}));
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 sequelize.sync()
     .then(() => console.log('DB Synchronized'))

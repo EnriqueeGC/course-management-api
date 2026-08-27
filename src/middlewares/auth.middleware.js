@@ -1,26 +1,24 @@
 const jwt = require("jsonwebtoken");
 
 const isAuth = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const token = req.cookies.authToken;
 
-  if(!authHeader || !authHeader.startsWith("Bearer ")){
+  if(!token){
     return res.status(401).json({
-        message: "Access denied. No token provided"
+      message: "Access denied, not token providen"
     });
-  };
-
-  const token = authHeader.split(" ")[1];
-  
+  }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
-
-    next()
+    next();
   } catch (error) {
     return res.status(403).json({
       message: "Invalid or expired token"
     });
-  }
-};
+  };
+}
 
-module.exports = {isAuth};
+module.exports = {
+  isAuth,
+};
