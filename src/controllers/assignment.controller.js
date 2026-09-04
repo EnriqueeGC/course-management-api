@@ -16,16 +16,20 @@ const create = async(req, res, next) => {
 
 const getAll = async(req, res, next) => {
   try {
-    const { filters, page, limit } = req.query;
+    const { page, limit, userId, courseId } = req.query;
 
-    const assignments = await assignmentService.getPaginatedAssignments({filters}, page, limit);
+    const assignments = await assignmentService.getPaginatedAssignments(
+      {courseId, userId},
+      page, 
+      limit
+    );
 
     const hasAssignments = assignments.data && assignments.data.length > 0;
 
     res.status(200).json({
       message: hasAssignments
-      ? "Courses find successfully"
-      : "You dont have any courses yet",
+      ? "Assignments fetched successfully"
+      : "No assignments found",
       ...assignments
     });
   } catch (error) {

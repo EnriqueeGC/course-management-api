@@ -57,7 +57,10 @@ class UserService {
     const { count, rows } = await User.findAndCountAll({
       limit: validLimit,
       offset: offset,
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']], 
+      where: {
+        role: 2
+      } 
     });
 
     const totalPages = Math.ceil(count / validLimit);

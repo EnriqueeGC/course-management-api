@@ -51,13 +51,18 @@ class AssignmentService{
 
     const offset = (validPage - 1) * validLimit;
 
-    const { courseId } = filters;
+    const { courseId, userId } = filters;
     const whereConditions = {};
+
+    if (userId){
+      await userService._ensureUserExist(userId);
+      whereConditions.userId = userId;
+    };
 
     if (courseId){
       await coursesService._ensureCourseExist(courseId);
       whereConditions.courseId = courseId;
-    }
+    };
 
     const { count, rows }= await Assignments.findAndCountAll({
       limit: validLimit,
