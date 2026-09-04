@@ -24,6 +24,7 @@ class AuthService {
 
     return {
       user: {
+        userId: user.userId,
         name: user.name,
         email: user.email,
         role: user.role
