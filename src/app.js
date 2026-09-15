@@ -11,7 +11,7 @@ const authRoutes = require('./routes/auth.routes');
 const errorHandler = require('./middlewares/errorHandler');
 
 const corsOptions = {
-  origin: 'https://tu-frontend.onrender.com', 
+  origin: process.env.CLIENT_URL;
   credentials: true, 
   optionsSuccessStatus: 200
 };
