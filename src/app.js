@@ -10,9 +10,15 @@ const assignmentRoutes = require('./routes/assignment.routes');
 const authRoutes = require('./routes/auth.routes');
 const errorHandler = require('./middlewares/errorHandler');
 
+const corsOptions = {
+  origin: 'https://tu-frontend.onrender.com', 
+  credentials: true, 
+  optionsSuccessStatus: 200
+};
+
 const app = express()
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
