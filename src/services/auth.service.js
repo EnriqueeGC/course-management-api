@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/index.models");
 const authConfig = require("../config/auth.config");
-const { UnauthorizedError } = require("../utils/errors");
+const { UnauthorizedError, NotFoundError } = require("../utils/errors");
 
 class AuthService {
   async login({email, password}) {
@@ -30,6 +30,22 @@ class AuthService {
         role: user.role
       },
       token,
+    };
+  };
+
+  async me(userId) {
+    const user = await User.findByPk(userId);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    return {
+      user: {
+        userId: user.userId,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      },
     };
   };
 };

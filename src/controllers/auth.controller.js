@@ -34,7 +34,19 @@ const logOut = (req, res, next) => {
   });
 };
 
+const me = async (req, res, next) => {
+  try {
+    const userId = req.user.sub ?? req.user.userId;
+    const result = await authService.me(userId);
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   login,
-  logOut
+  logOut,
+  me
 };
