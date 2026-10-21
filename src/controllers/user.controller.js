@@ -4,10 +4,18 @@ const userService = new UserService();
 
 const register = async (req, res, next) => {
   try {
-    const result = await userService.register(req.body);
+    const { token, user } = await userService.register(req.body);
+
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV = 'production',
+      sameSite: 'strict',
+      maxAge: 3600000
+    });
+
     res.status(201).json({
       message: "User registered successfully",
-      ...result,
+      ...user,
     });
   } catch (error) {
     next(error);
